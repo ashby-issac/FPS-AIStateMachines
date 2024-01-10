@@ -16,24 +16,26 @@ public class Patrol : State
     protected override void Enter()
     {
         checkpointIndex = GetClosestCheckpointIndex();
-        agent.SetDestination(Checkpoints[checkpointIndex].position);
+        agent.SetDestination(checkpoints[checkpointIndex].position);
         
-        SetNPCProps(speed, isStopped, patrolState);
+        SetNPCProperties(speed, isStopped, patrolState);
         base.Enter();
     }
 
     protected override void Update()
     {
-        if (Checkpoints[checkpointIndex] != null) 
-            agent.SetDestination(Checkpoints[checkpointIndex].position);
-        
         if (IsSpottedPlayer())
         {
             nextState = new Chase(npc, agent, anim, player);
             base.Exit();
         }
         else if (agent.hasPath && agent.remainingDistance < 1f)
-            checkpointIndex = checkpointIndex > Checkpoints.Count - 1 ? 0 : checkpointIndex++;
+        {
+            checkpointIndex = checkpointIndex > checkpoints.Count - 1 ? 0 : ++checkpointIndex;
+            Debug.Log($":: Checkpoint: {checkpointIndex} || (Count - 1): {checkpoints.Count - 1}");
+            if (checkpointIndex <= checkpoints.Count - 1)
+                agent.SetDestination(checkpoints[checkpointIndex].position);
+        }
     }
 
     protected override void Exit() => anim.ResetTrigger(patrolState);

@@ -17,18 +17,22 @@ public class State
     protected NavMeshAgent agent;
     protected Animator anim;
 
-    protected float visionDistance = 20f, visionAngle = 60f, closeRangeDistance = 3f, shootRange = 8f, rotationSpeed = 5f;
+    protected float visionDistance = 15f;
+    protected float visionAngle = 60f;
+    protected float closeRangeDistance = 3f;
+    protected float shootRange = 8f;
+    protected float rotationSpeed = 5f;
 
-    protected List<Transform> Checkpoints => GameEnvironment.Instance.Checkpoints;
+    protected List<Transform> checkpoints => GameEnvironment.Instance.Checkpoints;
 
     protected virtual void Enter() => stage = STAGE.Update;
     protected virtual void Update() => stage = STAGE.Update;
     protected virtual void Exit() => stage = STAGE.Exit;
 
-
     public State(Transform npc, NavMeshAgent agent, Animator anim, Transform player)
     {
         stage = STAGE.Enter;
+
         this.npc = npc;
         this.agent = agent;
         this.anim = anim;
@@ -61,25 +65,24 @@ public class State
 
     protected int GetClosestCheckpointIndex()
     {
-        int checkpointIndex = 0, checkpointCounter = 0;
+        int checkpointIndex = 0;
         var checkpoints = GameEnvironment.Instance.Checkpoints;
         var closestCheckpointDistance = Mathf.Infinity;
 
-        checkpoints.ForEach(checkpoint =>
+        for (int i = 0; i < checkpoints.Count; i++)
         {
-            var distanceToCheckpoint = Vector3.Distance(npc.position, checkpoint.position);
+            var distanceToCheckpoint = Vector3.Distance(npc.position, checkpoints[i].position);
             if (distanceToCheckpoint < closestCheckpointDistance)
             {
                 closestCheckpointDistance = distanceToCheckpoint;
-                checkpointIndex = checkpointCounter;
+                checkpointIndex = i;
             }
-            checkpointCounter++;
-        });
+        }
 
         return checkpointIndex;
     }
 
-    protected void SetNPCProps(float moveSpeed, bool isMoving, string animState)
+    protected void SetNPCProperties(float moveSpeed, bool isMoving, string animState)
     {
         agent.speed = moveSpeed;
         agent.isStopped = isMoving;

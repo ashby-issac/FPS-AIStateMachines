@@ -13,7 +13,7 @@ internal class Chase : State
 
     protected override void Enter()
     {
-        SetNPCProps(speed, isStopped, runState);
+        SetNPCProperties(speed, isStopped, runState);
         base.Enter();
     }
 

@@ -13,7 +13,7 @@ public class Attack : State
 
     protected override void Enter()
     {
-        SetNPCProps(speed, isStopped, animState);
+        SetNPCProperties(speed, isStopped, animState);
         base.Enter();
     }
 

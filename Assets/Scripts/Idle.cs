@@ -12,7 +12,7 @@ public class Idle : State
 
     protected override void Enter()
     {
-        SetNPCProps(speed, isStopped, idleState);
+        SetNPCProperties(speed, isStopped, idleState);
         base.Enter();
     }
 
@@ -23,7 +23,7 @@ public class Idle : State
             nextState = new Chase(npc, agent, anim, player);
             base.Exit();
         }
-        else if (Random.Range(0, 5000) < 10)
+        else if (Random.Range(0, 100) < 10)
         {
             nextState = new Patrol(npc, agent, anim, player);
             base.Exit();
